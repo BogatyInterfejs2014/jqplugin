@@ -5,12 +5,14 @@
 		var methods = {
 			regular : function(obj, pattern){
 				var str = obj.val();
-				//console.log(typeof str);
-				//var pattern = settings.regexp;
-				//var result = str.match(settings.regexp);
+				//var result = pattern.test(str);
+				var result = str.match(pattern);
+				return result;
+			},
+			emmail : function(obj) {
+				var str = obj.val();
+				var pattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/;
 				var result = pattern.test(str);
-				//console.log(str + " " + pattern);
-				//console.log(result);
 				return result;
 			}
 		};
@@ -26,13 +28,19 @@
 		//console.log(settings);
 		
 		return this.each(function() {
-			//console.log(settings);
+			
 			$(this).attr("placeholder",settings.text);
 			
 			if (settings.regexp){
 				$(this).blur(function(){
 					var out = methods.regular($(this),settings.regexp);
-					console.log(out);
+					console.log("Regexp " + out);
+				});
+			}
+			if (settings.email){
+				$(this).blur(function(){
+					var out = methods.emmail($(this));
+					console.log("Email " + out);
 				});
 			}
 		
