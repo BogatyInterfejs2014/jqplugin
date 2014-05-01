@@ -5,8 +5,8 @@
 		var methods = {
 			regular : function(obj, pattern){
 				var str = obj.val();
-				//var result = pattern.test(str);
-				var result = str.match(pattern);
+				var result = pattern.test(str);
+				//var result = str.match(pattern);
 				return result;
 			},
 			emmail : function(obj) {
@@ -35,12 +35,22 @@
 				$(this).blur(function(){
 					var out = methods.regular($(this),settings.regexp);
 					console.log("Regexp " + out);
+					if (!out){
+						$(this).css('box-shadow','1px 1px 10px red');
+					}else{
+						$(this).css('box-shadow','');
+					}
 				});
 			}
 			if (settings.email){
 				$(this).blur(function(){
 					var out = methods.emmail($(this));
 					console.log("Email " + out);
+					if (!out){
+						$(this).css('box-shadow','1px 1px 10px red');
+					}else{
+						$(this).css('box-shadow','');
+					}
 				});
 			}
 		
