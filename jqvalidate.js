@@ -22,6 +22,15 @@
 				var lowerchar = /[a-z]/g
 				var numberpass = /[0-9]/g
 				var specialchars = /[!@#$%^&*?_~]/g
+				var checkisnull = function(str){
+					var temp = password.match(str);
+					if(temp == null){
+						temp = 0;
+					}else{
+						temp = password.match(str).length;
+					}
+					return temp;
+				}
 				//Sprawdzanie dlugosci
 				if (password.length < 5){
 			        passScore += 5;
@@ -32,8 +41,9 @@
 			    else if (password.length > 7){
 			        passScore += 25;
 			    }
-			    var uppercount = password.match(upperchar).length;
-			    var lowercount = password.match(lowerchar).length;
+
+			    var uppercount = checkisnull(upperchar);
+			    var lowercount = checkisnull(lowerchar);
 
 			    //Sprawdzanie czy haslo posiada tylko male litery
 			    if (uppercount == 0 && lowercount != 0){ 
@@ -44,7 +54,7 @@
 			        passScore += 20; 
 			    }
 			    //Sprawdzanie czy haslo zawiera liczby
-			    var numberCount = password.match(numberpass).length;
+			    var numbercount = checkisnull(numberpass);
 			    if (numbercount == 1){
 			        passScore += 10;
 			    }
@@ -52,7 +62,7 @@
 			        passScore += 20;
 			    }
 			    //Sprawdzanie czy haslo posiada znaki specjalne
-			    var charactercount = password.match(specialchars).length;
+			    var charactercount = checkisnull(specialchars);
 			    if (charactercount == 1){
 			        passScore += 10;
 			    }   

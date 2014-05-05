@@ -7,6 +7,6 @@ $(document).ready(function(){
 		email:true
 	});
 	$("#example2").jqval({
-		email:false
+		passcomplex:true
 	});
 });
