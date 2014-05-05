@@ -14,7 +14,77 @@
 				var pattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/;
 				var result = pattern.test(str);
 				return result;
+			},
+			passcompl: function(obj) {
+				var password = obj.val();
+				var passScore = 0;
+				var upperchar = /[A-Z]/g
+				var lowerchar = /[a-z]/g
+				var numberpass = /[0-9]/g
+				var specialchars = /[!@#$%^&*?_~]/g
+				//Sprawdzanie dlugosci
+				if (password.length < 5){
+			        passScore += 5;
+			    }
+			    else if (password.length > 4 && password.length < 8){
+			        passScore += 10;
+			    }
+			    else if (password.length > 7){
+			        passScore += 25;
+			    }
+			    var uppercount = password.match(upperchar).length;
+			    var lowercount = password.match(lowerchar).length;
+
+			    //Sprawdzanie czy haslo posiada tylko male litery
+			    if (uppercount == 0 && lowercount != 0){ 
+			        passScore += 10; 
+			    }
+			    //Sprawdzanie czy haslo posiada male i duze litery
+			    else if (uppercount != 0 && lowercount != 0){ 
+			        passScore += 20; 
+			    }
+			    //Sprawdzanie czy haslo zawiera liczby
+			    var numberCount = password.match(numberpass).length;
+			    if (numbercount == 1){
+			        passScore += 10;
+			    }
+			    if (numbercount >= 3){
+			        passScore += 20;
+			    }
+			    //Sprawdzanie czy haslo posiada znaki specjalne
+			    var charactercount = password.match(specialchars).length;
+			    if (charactercount == 1){
+			        passScore += 10;
+			    }   
+			    if (charactercount > 1){
+			        passScore += 25;
+			    }
+			    //Sprawdzanie czy haslo posiada liczby, duze i male litery
+			    if (numbercount != 0 && uppercount != 0 && lowercount != 0){
+			        passScore += 2;
+			    }
+				//Sprawdzanie czy haslo posiada liczby, duze i male litery oraz znaki specjalne			    
+				if (numbercount != 0 && uppercount != 0 && lowercount != 0 && charactercount != 0)
+			    {
+			        passScore += 5;
+			    }
+			    //Zwracanie sily wprowadzanego hasla
+			    if (passScore >= 80){
+			        var strText = "Very Strong";
+			    }else if (passScore >= 60){
+			        var strText = "Strong";
+			    }else if (passScore >= 40){
+			        var strText = "Average";
+			    }else if (passScore >= 20){
+			        var strText = "Weak";
+			    }else{
+			        var strText = "Very Weak";
+			    }
+
+			    return strText;
+
 			}
+
 		};
 
 		var settings = $.extend({
@@ -53,7 +123,12 @@
 					}
 				});
 			}
-		
+			if(settings.passcomplex){
+				$(this).blur(function(){
+					var out = methods.passcompl($(this));
+					console.log("Strength " + out);
+				});
+			}
 		});
 	};
 
