@@ -2,6 +2,11 @@
 
 
 	$.fn.jqval = function(options){
+		var codes = $.ajax({
+				url: "kody.json",
+				dataType: "json"
+		});
+
 		var methods = {
 			regular : function(obj, pattern){
 				var str = obj.val();
@@ -97,16 +102,29 @@
 			zipc: function(obj){
 				var str = obj.val();
 				var result = /[0-9]{2}-[0-9]{3}/.test(str);
-				var place = ""
-				if(result){
-					$.getJSON('kody.json',function(data){
+				var place = "";
+				if(result === true){
+					codes.done(function(data){
+						place = data[str];
+					});
+
+					/*$.getJSON("kody.json",function(data){
+						console.log("inside");
+						//console.log(data);
+						place = data[str];
+					});
+					$.ajax({
+						url:'https://raw.githubusercontent.com/BogatyInterfejs2014/jqplugin/master/kody.json&callback=',
+						datatype : "jsonp"
+					}).done(function(data){
 						console.log(data);
 						place = data[result];
-					});
+					});*/
 				}else{
 					place = result;
 				}
-				return result;
+					
+				return place;
 			} 
 
 		};
