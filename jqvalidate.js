@@ -2,24 +2,40 @@
 
 
 	$.fn.jqval = function(options){
+		//Przełączanie czerwonej ramki na polu tekstowym oraz wlaczanie i wylaczanie przycisku submit
+		var redframe = function(obj,bol){
+			if (!bol){
+				obj.css('box-shadow','1px 1px 5px red');
+				$(":submit").attr("disabled","disabled");
+			}else{
+				obj.css('box-shadow','');
+				$(":submit").removeAttr("disabled", "disabled");
+			}
+		};
+		//Pobieranie kodow tekstowych
 		var codes = $.ajax({
 				url: "kody.json",
-				dataType: "json"
+				//url:"http://roberttomczak.github.io/charts/kody.json",
+				dataType: "json",
+				//contentType:'application/json'
 		});
 
 		var methods = {
+			//Sprawdzanie czy wprowadzane dane walidują się wyrażeniem regularnym
 			regular : function(obj, pattern){
 				var str = obj.val();
 				var result = pattern.test(str);
 				//var result = str.match(pattern);
 				return result;
 			},
+			//Sprawdzanie czy wprowadzane dane walidują się wyrażeniem regularnym walidujacym email
 			emmail : function(obj) {
 				var str = obj.val();
 				var pattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/;
 				var result = pattern.test(str);
 				return result;
 			},
+			//Sprawdzanie czy wprowadzane hasło jest skomplikowane
 			passcompl: function(obj) {
 				var password = obj.val();
 				var passScore = 0;
@@ -99,6 +115,7 @@
 				return strText;
 
 			},
+			//Wypisywanie nazwy miejscowości na podstawie kodu pocztowego
 			zipc: function(obj){
 				var str = obj.val();
 				var result = /[0-9]{2}-[0-9]{3}/.test(str);
@@ -107,19 +124,6 @@
 					codes.done(function(data){
 						place = data[str];
 					});
-
-					/*$.getJSON("kody.json",function(data){
-						console.log("inside");
-						//console.log(data);
-						place = data[str];
-					});
-					$.ajax({
-						url:'https://raw.githubusercontent.com/BogatyInterfejs2014/jqplugin/master/kody.json&callback=',
-						datatype : "jsonp"
-					}).done(function(data){
-						console.log(data);
-						place = data[result];
-					});*/
 				}else{
 					place = result;
 				}
@@ -145,34 +149,30 @@
 				$(this).blur(function(){
 					var out = methods.regular($(this),settings.regexp);
 					console.log("Regexp " + out);
-					if (!out){
-						$(this).css('box-shadow','1px 1px 10px red');
-					}else{
-						$(this).css('box-shadow','');
-					}
+					redframe($(this),out);
 				});
 			}
 			if (settings.email){
 				$(this).blur(function(){
 					var out = methods.emmail($(this));
 					console.log("Email " + out);
-					if (!out){
-						$(this).css('box-shadow','1px 1px 10px red');
-					}else{
-						$(this).css('box-shadow','');
-					}
+					redframe($(this),out);
 				});
 			}
 			if(settings.passcomplex){
 				$(this).blur(function(){
 					var out = methods.passcompl($(this));
 					console.log("Strength " + out);
+					$("#strength").remove();
+					$(this).parent().append("<p id='strength'>" + out + "</p>");
 				});
 			}
 			if(settings.zipcode){
 				$(this).blur(function(){
 					var out = methods.zipc($(this));
 					console.log("Zipcode " + out);
+					$("#zip").remove();
+					$(this).parent().append("<p id='zip'>" + out + "</p>");
 				});
 			}
 		});

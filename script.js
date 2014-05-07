@@ -2,8 +2,9 @@ $(document).ready(function(){
 
 	$("#example").jqval({
 		text:'HI',
-		regexp: /[a-z@.]+/
-	}).jqval({
+		regexp: /[A-Z]+/
+	});
+	$("#example1").jqval({
 		email:true
 	});
 	$("#example2").jqval({
