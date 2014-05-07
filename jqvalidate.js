@@ -93,7 +93,21 @@
 
 				return strText;
 
-			}
+			},
+			zipc: function(obj){
+				var str = obj.val();
+				var result = /[0-9]{2}-[0-9]{3}/.test(str);
+				var place = ""
+				if(result){
+					$.getJSON('kody.json',function(data){
+						console.log(data);
+						place = data[result];
+					});
+				}else{
+					place = result;
+				}
+				return result;
+			} 
 
 		};
 
@@ -104,9 +118,7 @@
 				passcomplex : null,
 				zipcode: null
 			}, options);
-		
-		//console.log(settings);
-		
+				
 		return this.each(function() {
 			
 			$(this).attr("placeholder",settings.text);
@@ -137,6 +149,12 @@
 				$(this).blur(function(){
 					var out = methods.passcompl($(this));
 					console.log("Strength " + out);
+				});
+			}
+			if(settings.zipcode){
+				$(this).blur(function(){
+					var out = methods.zipc($(this));
+					console.log("Zipcode " + out);
 				});
 			}
 		});

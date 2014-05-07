@@ -9,4 +9,7 @@ $(document).ready(function(){
 	$("#example2").jqval({
 		passcomplex:true
 	});
+	$("#example3").jqval({
+		zipcode:true
+	});
 });
