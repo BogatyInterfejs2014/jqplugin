@@ -4,7 +4,7 @@
 	$.fn.jqval = function(options){
 		//Przełączanie czerwonej ramki na polu tekstowym oraz wlaczanie i wylaczanie przycisku submit
 		var redframe = function(obj,bol){
-			if (!bol){
+			if (!bol || undefined){
 				obj.css('box-shadow','1px 1px 5px red');
 				$(":submit").attr("disabled","disabled");
 			}else{
@@ -171,8 +171,13 @@
 				$(this).blur(function(){
 					var out = methods.zipc($(this));
 					console.log("Zipcode " + out);
-					$("#zip").remove();
-					$(this).parent().append("<p id='zip'>" + out + "</p>");
+					redframe($(this),out);
+					if(out){
+						$("#zip").remove();
+						$(this).parent().append("<p id='zip'>" + out + "</p>");
+					}else{
+						$("#zip").remove();
+					}
 				});
 			}
 		});
